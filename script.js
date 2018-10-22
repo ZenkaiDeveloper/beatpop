@@ -38,35 +38,46 @@ function preload ()
 }
 
 
-function create ()
-{
 
-  this.add.image(imageWidth, imageHeight, 'background');
-  let createObj = this;
-
-  let rect = new Phaser.Geom.Rectangle(rectX, rectY, rectWidth, rectHeight);
-
-  let graphics = this.add.graphics()
-  graphics.lineStyle(2, 0xFF0000, 1.0);
-  graphics.fillStyle(0xFFFFFF, 1.0);
-
-  this.input.on('pointermove', function(pointer) {
-    Phaser.Geom.Rectangle.CenterOn(rect, pointer.x, pointer.y);
-    graphics.clear();
-     graphics.fillRectShape(rect);
-  });
+function create (){
+    this.add.image(400, 300, 'background');
+    const create = this;
+    setInterval(() => (createOrb(this)), 1000);
+    drawLine(create, 200, 600, 200, 0);
+    drawLine(create, 400, 600, 400, 0);
+    drawLine(create, 600, 600, 600, 0);
 
 
-  let particles = this.add.particles('orb');
-  setInterval(()=>{
-    var emitter = particles.createEmitter({
-      speed: 100,
-      scale: { start: .25, end: 0 },
-      blendMode: 'ADD'
+    this.add.image(imageWidth, imageHeight, 'background');
+    let createObj = this;
+
+    let rect = new Phaser.Geom.Rectangle(rectX, rectY, rectWidth, rectHeight);
+
+    let graphics = this.add.graphics()
+    graphics.lineStyle(2, 0xFF0000, 1.0);
+    graphics.fillStyle(0xFFFFFF, 1.0);
+
+    this.input.on('pointermove', function(pointer) {
+      Phaser.Geom.Rectangle.CenterOn(rect, pointer.x, pointer.y);
+      graphics.clear();
+       graphics.fillRectShape(rect);
     });
+}
 
+function drawLine(create, startX,startY,endX,endY){
+  let line = new Phaser.Geom.Line(startX, startY, endX, endY);
+  let graphics = create.add.graphics({ lineStyle: { width: 2, color: 0xaa00aa } });
+  graphics.strokeLineShape(line);
+}
 
-    let circle = this.physics.add.image(400,140,"orb");
+function createOrb(createObj){
+  let particles = createObj.add.particles('orb');
+    let emitter = particles.createEmitter({
+        speed: 100,
+        scale: { start: .25, end: 0 },
+        blendMode: 'ADD'
+    });
+    let circle = createObj.physics.add.image(400,140,"orb");
     // circle.setVelocity(100, 200);
     circle.setBounce(1);
     circle.setCollideWorldBounds(true);
@@ -74,9 +85,26 @@ function create ()
     emitter.startFollow(circle);
 
     circle.setVelocity(300, 300);
-  }, 1000)
-
-
+}
+// function create ()
+// {
+//     var ball1 = this.physics.add.image(100, 240, 'wizball');
+//     var ball2 = this.physics.add.image(700, 240, 'wizball');
+//
+//     ball1.setCircle(46);
+//     ball2.setCircle(46);
+//
+//     ball1.setCollideWorldBounds(true);
+//     ball2.setCollideWorldBounds(true);
+//
+//     ball1.setBounce(1);
+//     ball2.setBounce(1);
+//
+//     ball1.setVelocity(150);
+//     ball2.setVelocity(-200, 60);
+//
+//     this.physics.add.collider(ball1, ball2);
+// }
 
   function update(){
     graphics.clear();
