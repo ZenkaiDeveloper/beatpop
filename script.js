@@ -1,96 +1,85 @@
-var config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 200 }
-        }
-    },
-    scene: {
-        preload: preload,
-        create: create
+const width =800;
+const height = 600;
+const gravity = { y: 200 }
+const imageWidth = 400
+const imageHeight = 300
+const rectX = 300
+const rectY = 433
+const rectWidth = 150
+const rectHeight =  10
+
+let config = {
+  type: Phaser.AUTO,
+  width: width,
+  height: height,
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: gravity
     }
+  },
+  scene: {
+    preload: preload,
+    create: create
+  }
 };
 
 
-var game = new Phaser.Game(config);
+let game = new Phaser.Game(config);
 
 function preload ()
 {
-    // this.load.setBaseURL('http://labs.phaser.io');
-    this.load.image('background', './mountains-tile.png');
-    // this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-    // this.load.image('red', 'assets/particles/red.png');
-    this.load.image('orb','./white.png');
-
+  // this.load.setBaseURL('http://labs.phaser.io');
+  this.load.image('background', './mountains-tile.png');
+  // this.load.image('logo', 'assets/sprites/phaser3-logo.png');
+  // this.load.image('red', 'assets/particles/red.png');
+  this.load.image('orb','./white.png');
 
 }
-
 
 
 function create ()
 {
 
-    this.add.image(400, 300, 'background');
-    let createObj = this;
+  this.add.image(imageWidth, imageHeight, 'background');
+  let createObj = this;
+
+  let rect = new Phaser.Geom.Rectangle(rectX, rectY, rectWidth, rectHeight);
+
+  let graphics = this.add.graphics()
+  graphics.lineStyle(2, 0xFF0000, 1.0);
+  graphics.fillStyle(0xFFFFFF, 1.0);
+
+  this.input.on('pointermove', function(pointer) {
+    Phaser.Geom.Rectangle.CenterOn(rect, pointer.x, pointer.y);
+    graphics.clear();
+     graphics.fillRectShape(rect);
+  });
 
 
-    let particles = this.add.particles('orb');
-    setInterval(()=>{
-      var emitter = particles.createEmitter({
-          speed: 100,
-          scale: { start: .25, end: 0 },
-          blendMode: 'ADD'
-      });
+  let particles = this.add.particles('orb');
+  setInterval(()=>{
+    var emitter = particles.createEmitter({
+      speed: 100,
+      scale: { start: .25, end: 0 },
+      blendMode: 'ADD'
+    });
 
 
-      let circle = this.physics.add.image(400,140,"orb");
-      // circle.setVelocity(100, 200);
-      circle.setBounce(1);
-      circle.setCollideWorldBounds(true);
+    let circle = this.physics.add.image(400,140,"orb");
+    // circle.setVelocity(100, 200);
+    circle.setBounce(1);
+    circle.setCollideWorldBounds(true);
 
-      emitter.startFollow(circle);
+    emitter.startFollow(circle);
 
-      circle.setVelocity(300, 300);
-    }, 1000)
-
-
-    // var logo = this.physics.add.image(400, 100, 'logo');
+    circle.setVelocity(300, 300);
+  }, 1000)
 
 
-
-
-    //
-    // logo.setBody({
-    //   type: 'circle',
-    //   radius: 20
-    // });
-
-
-}
-
-// function create ()
-// {
-//     var ball1 = this.physics.add.image(100, 240, 'wizball');
-//     var ball2 = this.physics.add.image(700, 240, 'wizball');
-//
-//     ball1.setCircle(46);
-//     ball2.setCircle(46);
-//
-//     ball1.setCollideWorldBounds(true);
-//     ball2.setCollideWorldBounds(true);
-//
-//     ball1.setBounce(1);
-//     ball2.setBounce(1);
-//
-//     ball1.setVelocity(150);
-//     ball2.setVelocity(-200, 60);
-//
-//     this.physics.add.collider(ball1, ball2);
-// }
 
   function update(){
-
+    graphics.clear();
+    graphics.strokeLineShape(line);
   }
+}
