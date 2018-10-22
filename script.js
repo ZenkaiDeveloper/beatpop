@@ -30,47 +30,37 @@ function preload ()
 
 
 
-function create ()
-{
-
+function create (){
     this.add.image(400, 300, 'background');
-    let createObj = this;
-
-
-    let particles = this.add.particles('orb');
-    setInterval(()=>{
-      var emitter = particles.createEmitter({
-          speed: 100,
-          scale: { start: .25, end: 0 },
-          blendMode: 'ADD'
-      });
-
-
-      let circle = this.physics.add.image(400,140,"orb");
-      // circle.setVelocity(100, 200);
-      circle.setBounce(1);
-      circle.setCollideWorldBounds(true);
-
-      emitter.startFollow(circle);
-
-      circle.setVelocity(300, 300);
-    }, 1000)
-
-
-    // var logo = this.physics.add.image(400, 100, 'logo');
-
-
-
-
-    //
-    // logo.setBody({
-    //   type: 'circle',
-    //   radius: 20
-    // });
-
-
+    const create = this;
+    setInterval(() => (createOrb(this)), 1000);
+    drawLine(create, 200, 600, 200, 0);
+    drawLine(create, 400, 600, 400, 0);
+    drawLine(create, 600, 600, 600, 0);
 }
 
+function drawLine(create, startX,startY,endX,endY){
+  let line = new Phaser.Geom.Line(startX, startY, endX, endY);
+  let graphics = create.add.graphics({ lineStyle: { width: 2, color: 0xaa00aa } });
+  graphics.strokeLineShape(line);
+}
+
+function createOrb(createObj){
+  let particles = createObj.add.particles('orb');
+    let emitter = particles.createEmitter({
+        speed: 100,
+        scale: { start: .25, end: 0 },
+        blendMode: 'ADD'
+    });
+    let circle = createObj.physics.add.image(400,140,"orb");
+    // circle.setVelocity(100, 200);
+    circle.setBounce(1);
+    circle.setCollideWorldBounds(true);
+
+    emitter.startFollow(circle);
+
+    circle.setVelocity(300, 300);
+}
 // function create ()
 // {
 //     var ball1 = this.physics.add.image(100, 240, 'wizball');
