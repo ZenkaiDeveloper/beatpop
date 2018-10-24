@@ -33,6 +33,7 @@ class Gameplay extends Phaser.Scene {
 
   loadPaddle(){
     this.paddle = this.physics.add.image(width/2,rectY,"paddle");
+    debugger
     this.paddle.body.gravity.y = -100;
     this.paddle.setBounce(0.2);
     this.paddle.setCollideWorldBounds(true);
