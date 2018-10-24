@@ -36,8 +36,7 @@ class Gameplay extends Phaser.Scene {
     this.paddle.setCollideWorldBounds(true);
     this.paddle.body.immovable = true;
     this.physics.add.collider(circle,this.paddle,console.log)
-    this.image = this.physics.add.staticImage(width/2,height*.85,'horizontal')
-    this.image.setDisplaySize(width, 250);
+    this.paddle.setDisplaySize(width/6, 20)
   }
 
 /////////////////////LifeCycles//////////////////////////////////////////////////////////////
@@ -54,6 +53,8 @@ class Gameplay extends Phaser.Scene {
     this.drawLine(width/2, height, width/2, 0);
     this.drawLine(3*width/4, height, 3*width/4, 0);
     this.createOrb(300,400)
+    this.image = this.physics.add.staticImage(width/2,height*.85,'horizontal')
+    this.image.setDisplaySize(width, 250);
     this.loadPaddle()
 
     this.add.text(width/8, 6*height/7, 'A', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
@@ -94,6 +95,6 @@ class Gameplay extends Phaser.Scene {
 
 
 
-
+//merge bro
 
 }
