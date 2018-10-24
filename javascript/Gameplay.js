@@ -27,13 +27,14 @@ class Gameplay extends Phaser.Scene {
     circle.setCollideWorldBounds(true);
     emitter.startFollow(circle);
     circle.setVelocity(xVel, yVel);
+    circleArr.push(circle)
   }
 
 
 
   loadPaddle(){
     this.paddle = this.physics.add.image(width/2,rectY,"paddle");
-    debugger
+
     this.paddle.body.gravity.y = -100;
     this.paddle.setBounce(0.2);
     this.paddle.setCollideWorldBounds(true);
@@ -72,12 +73,18 @@ class Gameplay extends Phaser.Scene {
     this.drawLine(width/4, height, width/4, 0);
     this.drawLine(width/2, height, width/2, 0);
     this.drawLine(3*width/4, height, 3*width/4, 0);
-    this.createOrb(300,400)
+
+    setInterval(() => {
+      this.createOrb(this.randomRange(-300, 300), this.randomRange(-300,300))
+    }, this.randomRange(2000, 4000))
+
     this.image = this.physics.add.image(width/2,height*.85,'horizontal')
     this.image.body.gravity.y = -100;
     this.image.body.immovable = true;
     this.image.setDisplaySize(width+20, 1);
+    scoreText = this.add.text(width*.85, 25, 'score: 0', { fontSize: '32px', fill: '#00ff00' });
     this.loadPaddle()
+
 
     this.add.text(width/8, 6*height/7, 'A', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
     this.add.text(3*width/8, 6*height/7, 'S', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
@@ -100,49 +107,50 @@ class Gameplay extends Phaser.Scene {
 
 
     this.moveBar();
-    this.physics.add.collider(circle,this.paddle,()=>{
-      this.paddle.displayWidth += this.interval
-      if (0 < circle.x && circle.x <= width/4 && this.key_a.isDown) {
-        score++;
-        circle.destroy();
-        this.particles.destroy();
-      }else if ( width/4 < circle.x && circle.x <= width/2  && this.key_s.isDown) {
+    circleArr.forEach((circle)=> {
+      this.physics.add.collider(circle,this.paddle,()=>{
 
-        score++;
-        circle.destroy();
-        this.particles.destroy();
-      }else if (width/2 < circle.x && circle.x <= 3*width/4 && this.key_d.isDown) {
+        if (0 < circle.x && circle.x <= width/4 && this.key_a.isUp) {
 
-        score++;
-        circle.destroy();
-        this.particles.destroy();
-      }else if(3*width/4 < circle.x && circle.x <= width && this.key_f.isDown){
+          this.paddle.displayWidth += this.interval
+          this.hitCircle()
+          circle.destroy();
+          this.particles.destroy();
 
-        score++;
-        circle.destroy();
-        this.particles.destroy();
-      }
-      console.log(score);
+        }else if ( width/4 < circle.x && circle.x <= width/2  && this.key_s.isUp) {
+          // debugger
+          this.paddle.displayWidth += this.interval
+
+          this.hitCircle()
+          circle.destroy();
+          this.particles.destroy();
+        }else if (width/2 < circle.x && circle.x <= 3*width/4 && this.key_d.isUp) {
+          this.paddle.displayWidth += this.interval
+          this.hitCircle()
+          circle.destroy();
+          this.particles.destroy();
+        }else if(3*width/4 < circle.x && circle.x <= width && this.key_f.isUp){
+          this.paddle.displayWidth += this.interval
+          this.hitCircle()
+          circle.destroy();
+          this.particles.destroy();
+        }
+        console.log(score);
+      })
     })
 
-    this.physics.add.collider(circle, this.image,()=>{
-      this.paddle.displayWidth -= this.interval
-      circle.destroy();
-      this.particles.destroy();
-    })
 
 
-    this.physics.add.collider(circle, this.image,console.log)
+    // this.physics.add.collider(circle, this.image,()=>{
+    //   this.paddle.displayWidth -= this.interval
+    //   circle.destroy();
+    //   this.particles.destroy();
+    // })
+    //
+    //
+    // this.physics.add.collider(circle, this.image,console.log)
 
-
-
-
-
-
-
-
-  }
-
+}
 
 
 
