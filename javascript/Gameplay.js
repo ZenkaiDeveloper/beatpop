@@ -9,25 +9,27 @@ class Gameplay extends Phaser.Scene {
   }
 
   drawLine (startX,startY,endX,endY) {
-  let line = new Phaser.Geom.Line(startX, startY, endX, endY);
-  let graphics = this.add.graphics({ lineStyle: { width: 2, color: 0xaa00aa } });
-  graphics.strokeLineShape(line);
-  return line;
-}
+    let line = new Phaser.Geom.Line(startX, startY, endX, endY);
+    let graphics = this.add.graphics({ lineStyle: { width: 2, color: 0xaa00aa } });
+    graphics.strokeLineShape(line);
+    return line;
+  }
 
   createOrb(xVel,yVel){
     this.particles = this.add.particles('orb');
-      let emitter = this.particles.createEmitter({
-          speed: 100,
-          scale: { start: .2, end: 0 },
-          blendMode: 'ADD'
-      });
-      circle = this.physics.add.image(width/2,height/4,"orb");
-      circle.setBounce(1);
-      circle.setCollideWorldBounds(true);
-      emitter.startFollow(circle);
-      circle.setVelocity(xVel, yVel);
+    let emitter = this.particles.createEmitter({
+      speed: 100,
+      scale: { start: .2, end: 0 },
+      blendMode: 'ADD'
+    });
+    circle = this.physics.add.image(width/2,height/4,"orb");
+    circle.setBounce(1);
+    circle.setCollideWorldBounds(true);
+    emitter.startFollow(circle);
+    circle.setVelocity(xVel, yVel);
   }
+
+
 
   loadPaddle(){
     this.paddle = this.physics.add.image(width/2,rectY,"paddle");
@@ -35,8 +37,18 @@ class Gameplay extends Phaser.Scene {
     this.paddle.setBounce(0.2);
     this.paddle.setCollideWorldBounds(true);
     this.paddle.body.immovable = true;
-    this.physics.add.collider(circle,this.paddle,console.log)
+    this.physics.add.collider(circle,this.paddle, this.hitCircle, null, this)
+    this.barSize()
+  }
+
+  barSize () {
     this.paddle.setDisplaySize(width/6, 20)
+  }
+
+  hitCircle ()
+  {
+    score += 10;
+    scoreText.setText('Score: ' + score);
   }
 
   moveBar(){
@@ -47,7 +59,9 @@ class Gameplay extends Phaser.Scene {
     }
   }
 
-/////////////////////LifeCycles//////////////////////////////////////////////////////////////
+
+
+  /////////////////////LifeCycles//////////////////////////////////////////////////////////////
 
   preload(){
     this.load.image('orb','../assets/white.png');
@@ -73,6 +87,8 @@ class Gameplay extends Phaser.Scene {
     this.key_right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     this.key_left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
 
+    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#00ff00' });
+
   }
 
 
@@ -82,6 +98,10 @@ class Gameplay extends Phaser.Scene {
       if (circle.y > height*.85) {
         circle.destroy();
         this.particles.destroy()
+        debugger
+
+
+
       }
 
     }
