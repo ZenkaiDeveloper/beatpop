@@ -37,13 +37,8 @@ class Gameplay extends Phaser.Scene {
     this.paddle.body.gravity.y = -100;
     this.paddle.setBounce(0.2);
     this.paddle.setCollideWorldBounds(true);
+    this.paddle.setDisplaySize(width/20, 15)
     this.paddle.body.immovable = true;
-    this.physics.add.collider(circle,this.paddle, this.hitCircle, null, this)
-    this.barSize()
-  }
-
-  barSize () {
-    this.paddle.setDisplaySize(width/6, 20)
   }
 
   hitCircle ()
@@ -55,9 +50,11 @@ class Gameplay extends Phaser.Scene {
   moveBar(){
     if (this.key_right.isDown) {
       this.paddle.body.velocity.x += 50
+
     }else if (this.key_left.isDown) {
       this.paddle.body.velocity.x -= 50
     }
+
   }
 
 
@@ -66,7 +63,7 @@ class Gameplay extends Phaser.Scene {
 
   preload(){
     this.load.image('orb','../assets/white.png');
-    this.load.image('horizontal', '../assets/lines-vector-red-1.gif')
+    this.load.image('horizontal', '../assets/redline.png')
     this.load.image("paddle", "../assets/bigIdea.png")
   }
 
@@ -76,8 +73,10 @@ class Gameplay extends Phaser.Scene {
     this.drawLine(width/2, height, width/2, 0);
     this.drawLine(3*width/4, height, 3*width/4, 0);
     this.createOrb(300,400)
-    this.image = this.physics.add.staticImage(width/2,height*.85,'horizontal')
-    this.image.setDisplaySize(width, 250);
+    this.image = this.physics.add.image(width/2,height*.85,'horizontal')
+    this.image.body.gravity.y = -100;
+    this.image.body.immovable = true;
+    this.image.setDisplaySize(width+20, 1);
     this.loadPaddle()
 
     this.add.text(width/8, 6*height/7, 'A', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
@@ -87,25 +86,58 @@ class Gameplay extends Phaser.Scene {
 
     this.key_right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     this.key_left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-
-    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#00ff00' });
-
+    this.key_a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    this.key_s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    this.key_d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.key_f = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+    this.delta = this.paddle.displayWidth - this.interval;
+    this.interval = width/50;
   }
 
 
+
   update(){
+
+
     this.moveBar();
-    if (circle) {
-      if (circle.y > height*.85) {
+    this.physics.add.collider(circle,this.paddle,()=>{
+      this.paddle.displayWidth += this.interval
+      if (0 < circle.x && circle.x <= width/4 && this.key_a.isDown) {
+        score++;
         circle.destroy();
-        this.particles.destroy()
-          // debugger
+        this.particles.destroy();
+      }else if ( width/4 < circle.x && circle.x <= width/2  && this.key_s.isDown) {
 
+        score++;
+        circle.destroy();
+        this.particles.destroy();
+      }else if (width/2 < circle.x && circle.x <= 3*width/4 && this.key_d.isDown) {
 
+        score++;
+        circle.destroy();
+        this.particles.destroy();
+      }else if(3*width/4 < circle.x && circle.x <= width && this.key_f.isDown){
 
+        score++;
+        circle.destroy();
+        this.particles.destroy();
       }
+      console.log(score);
+    })
 
-    }
+    this.physics.add.collider(circle, this.image,()=>{
+      this.paddle.displayWidth -= this.interval
+      circle.destroy();
+      this.particles.destroy();
+    })
+
+
+    this.physics.add.collider(circle, this.image,console.log)
+
+
+
+
+
 
 
 
