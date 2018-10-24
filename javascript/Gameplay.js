@@ -28,37 +28,33 @@ class Gameplay extends Phaser.Scene {
       emitter.startFollow(circle);
       circle.setVelocity(xVel, yVel);
   }
-  loadAndMakeBar(rectangle){
-    this.graphics = this.add.graphics();
-    this.graphics.lineStyle(2, 0xFF0000, 1.0);
-    this.graphics.fillStyle(0xFFFFFF, 1.0);
-    this.graphics.fillRectShape(rectangle);
+
+  loadPaddle(){
+    this.paddle = this.physics.add.image(width/2,rectY,"paddle");
+    this.paddle.body.gravity.y = -100;
+    this.paddle.setBounce(0.2);
+    this.paddle.setCollideWorldBounds(true);
+    this.paddle.body.immovable = true;
+    this.physics.add.collider(circle,this.paddle,console.log)
+    this.image = this.physics.add.staticImage(width/2,height*.85,'horizontal')
+    this.image.setDisplaySize(width, 250);
   }
+
 /////////////////////LifeCycles//////////////////////////////////////////////////////////////
 
   preload(){
     this.load.image('orb','../assets/white.png');
     this.load.image('horizontal', '../assets/lines-vector-red-1.gif')
+    this.load.image("paddle", "../assets/bigIdea.png")
   }
 
   create(){
+
     this.drawLine(width/4, height, width/4, 0);
     this.drawLine(width/2, height, width/2, 0);
     this.drawLine(3*width/4, height, 3*width/4, 0);
-
-
-    this.image = this.physics.add.staticImage(width/2,height*.85,'horizontal')
-    this.image.setDisplaySize(width, 250);
     this.createOrb(300,400)
-
-
-    this.physics.add.collider(circle,this.image,(e)=>{
-      console.log(e)
-    })
-
-
-    this.rect = new Phaser.Geom.Rectangle(rectX, rectY, rectWidth, rectHeight);
-    this.loadAndMakeBar(this.rect);
+    this.loadPaddle()
 
     this.add.text(width/8, 6*height/7, 'A', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
     this.add.text(3*width/8, 6*height/7, 'S', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
@@ -73,27 +69,25 @@ class Gameplay extends Phaser.Scene {
 
 
   update(){
+
     if (this.key_right.isDown) {
-      this.graphics.clear();
-      if (this.rect.x <= width-rectWidth) {
-        this.rect.centerX+=50
-      }
-      this.graphics.fillRectShape(this.rect);
+
+      this.paddle.body.velocity.x += 50
+
+
     }else if (this.key_left.isDown) {
-      this.graphics.clear();
-      if (this.rect.x >= 0) {
-        this.rect.centerX-=50
-      }
-      this.graphics.fillRectShape(this.rect);
+      this.paddle.body.velocity.x -= 50
     }
-    // if (circle) {
-    //   if (circle.y > height*.85) {
-    //     circle.destroy();
-    //     this.particles.destroy()
-    //   }
-    //
-    // }
-    // console.log(circle.body.y)
+
+
+    if (circle) {
+      if (circle.y > height*.85) {
+        circle.destroy();
+        this.particles.destroy()
+      }
+
+    }
+
 
 
   }
