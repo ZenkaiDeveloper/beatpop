@@ -98,7 +98,7 @@ class Gameplay extends Phaser.Scene {
       if (circle.y > height*.85) {
         circle.destroy();
         this.particles.destroy()
-        debugger
+          // debugger
 
 
 
