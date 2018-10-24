@@ -35,16 +35,41 @@ class Gameplay extends Phaser.Scene {
     this.paddle.setBounce(0.2);
     this.paddle.setCollideWorldBounds(true);
     this.paddle.body.immovable = true;
-    this.physics.add.collider(circle,this.paddle,console.log)
+    this.physics.add.collider(circle,this.paddle,()=>{
+      if (0 < circle.x && circle.x <= width/4 && this.key_a.isDown) {
+
+        score++;
+        circle.destroy();
+        this.particles.destroy();
+      }else if ( width/4 < circle.x && circle.x <= width/2  && this.key_s.isDown) {
+
+        score++;
+        circle.destroy();
+        this.particles.destroy();
+      }else if (width/2 < circle.x && circle.x <= 3*width/4 && this.key_d.isDown) {
+
+        score++;
+        circle.destroy();
+        this.particles.destroy();
+      }else if(3*width/4 < circle.x && circle.x <= width && this.key_f.isDown){
+      
+        score++;
+        circle.destroy();
+        this.particles.destroy();
+      }
+      console.log(score);
+    })
     this.paddle.setDisplaySize(width/6, 20)
   }
 
   moveBar(){
     if (this.key_right.isDown) {
       this.paddle.body.velocity.x += 50
+
     }else if (this.key_left.isDown) {
       this.paddle.body.velocity.x -= 50
     }
+
   }
 
 /////////////////////LifeCycles//////////////////////////////////////////////////////////////
@@ -65,6 +90,8 @@ class Gameplay extends Phaser.Scene {
     this.image.setDisplaySize(width, 250);
     this.loadPaddle()
 
+
+
     this.add.text(width/8, 6*height/7, 'A', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
     this.add.text(3*width/8, 6*height/7, 'S', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
     this.add.text(5*width/8, 6*height/7, 'D', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
@@ -72,19 +99,29 @@ class Gameplay extends Phaser.Scene {
 
     this.key_right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     this.key_left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+    this.key_a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    this.key_s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    this.key_d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.key_f = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
   }
 
 
   update(){
     this.moveBar();
+
+
     if (circle) {
       if (circle.y > height*.85) {
         circle.destroy();
-        this.particles.destroy()
+        this.particles.destroy();
       }
-
     }
+
+
+
+
+
 
 
 

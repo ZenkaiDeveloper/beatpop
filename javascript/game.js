@@ -3,12 +3,14 @@ const height = screen.height*.95;
 const gravity = { y: 100 };
 
 
+
 const rectX = 300
 const rectY = height*.80
 const rectWidth = 150
 const rectHeight =  10
 let platforms;
 let circle;
+let score = 0;
 
 let config = {
   type: Phaser.AUTO,
