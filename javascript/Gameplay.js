@@ -39,6 +39,14 @@ class Gameplay extends Phaser.Scene {
     this.paddle.setDisplaySize(width/6, 20)
   }
 
+  moveBar(){
+    if (this.key_right.isDown) {
+      this.paddle.body.velocity.x += 50
+    }else if (this.key_left.isDown) {
+      this.paddle.body.velocity.x -= 50
+    }
+  }
+
 /////////////////////LifeCycles//////////////////////////////////////////////////////////////
 
   preload(){
@@ -65,22 +73,11 @@ class Gameplay extends Phaser.Scene {
     this.key_right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     this.key_left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
 
-
   }
 
 
   update(){
-
-    if (this.key_right.isDown) {
-
-      this.paddle.body.velocity.x += 50
-
-
-    }else if (this.key_left.isDown) {
-      this.paddle.body.velocity.x -= 50
-    }
-
-
+    this.moveBar();
     if (circle) {
       if (circle.y > height*.85) {
         circle.destroy();
