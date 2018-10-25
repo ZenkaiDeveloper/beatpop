@@ -11,6 +11,9 @@ const rectHeight =  10
 let platforms;
 let circle;
 let score = 0;
+let scoreText;
+const circleArr = []
+
 
 let config = {
   type: Phaser.AUTO,
