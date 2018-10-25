@@ -9,11 +9,11 @@ class Gameplay extends Phaser.Scene {
   }
 
   drawLine (startX,startY,endX,endY) {
-    let line = new Phaser.Geom.Line(startX, startY, endX, endY);
-    let graphics = this.add.graphics({ lineStyle: { width: 2, color: 0xaa00aa } });
-    graphics.strokeLineShape(line);
-    return line;
-  }
+  let line = new Phaser.Geom.Line(startX, startY, endX, endY);
+  let graphics = this.add.graphics({ lineStyle: { width: 2, color: 0xaa00aa } });
+  graphics.strokeLineShape(line);
+  return line;
+}
 
 loadPaddle(){
   this.paddle = this.physics.add.image(width/2,rectY,"paddle");
@@ -64,35 +64,6 @@ loadPaddle(){
       }
 
     this.particles = this.add.particles('orb');
-<<<<<<< HEAD
-    let emitter = this.particles.createEmitter({
-      speed: 100,
-      scale: { start: .2, end: 0 },
-      blendMode: 'ADD'
-    });
-    circle = this.physics.add.image(width/2,height/4,"mainOrb");
-    circle.setBounce(1);
-    circle.setCollideWorldBounds(true);
-    emitter.startFollow(circle);
-    circle.setVelocity(xVel, yVel);
-    circle.setDisplaySize(150,150);
-    circle.setSize(100,450);
-  }
-
-
-
-    }
-
-
-
-    this.paddle.body.gravity.y = -100;
-    this.paddle.setBounce(0.2);
-    this.paddle.setCollideWorldBounds(true);
-    this.paddle.setDisplaySize(width/20, 15);
-    this.paddle.setSize(width/5, 15);
-    this.paddle.body.immovable = true;
-  }
-=======
       let emitter = this.particles.createEmitter({
           speed: 100,
           scale: { start: .2, end: 0 },
@@ -127,13 +98,6 @@ loadPaddle(){
 
 
 
->>>>>>> 4a9c19e8bf14ab115a5475f1c3ae1761fd938e21
-
-  hitCircle ()
-  {
-    score += 10;
-    scoreText.setText('Score: ' + score);
-  }
 
   moveBar(){
     if (this.key_right.isDown) {
@@ -144,33 +108,7 @@ loadPaddle(){
     }
   }
 
-<<<<<<< HEAD
-  paddleCollide(letter){
-    if (letter === "a" && 0 < circle.x && circle.x <= width/4) {
-      this.paddle.displayWidth += this.interval
-      score++;
-      circle.destroy();
-      this.particles.destroy();
-    }else if (letter === "s" && width/4 < circle.x && circle.x <= width/2 ) {
-      this.paddle.displayWidth += this.interval
-      score++;
-      circle.destroy();
-      this.particles.destroy();
-    }else if (letter === "d" && width/2 < circle.x && circle.x <= 3*width/4) {
-      this.paddle.displayWidth += this.interval
-      score++;
-      circle.destroy();
-      this.particles.destroy();
-    }else if(letter === "f" && 3*width/4 < circle.x && circle.x <= width){
-      this.paddle.displayWidth += this.interval
-      score++;
-      circle.destroy();
-      this.particles.destroy();
-    };
-  }
-=======
 
->>>>>>> 4a9c19e8bf14ab115a5475f1c3ae1761fd938e21
 
   keyboardCollide(){
     this.input.keyboard.on('keyup_A',(event)=>{
@@ -211,7 +149,7 @@ loadPaddle(){
 
 
 
-  /////////////////////LifeCycles//////////////////////////////////////////////////////////////
+/////////////////////LifeCycles//////////////////////////////////////////////////////////////
 
   preload(){
     this.load.image('mainOrb', "../assets/UIHere.png")
@@ -234,9 +172,6 @@ loadPaddle(){
     this.image.body.gravity.y = -100;
     this.image.body.immovable = true;
     this.image.setDisplaySize(width+20, 1);
-    scoreText = this.add.text(width*.85, 25, 'score: 0', { fontSize: '32px', fill: '#00ff00' });
-    this.loadPaddle()
-
 
 
 
@@ -274,5 +209,15 @@ loadPaddle(){
     //   // this.sys.game.destroy(true);
     //
     // }
+
+
+
+
+
   }
+
+
+
+
+
 }
