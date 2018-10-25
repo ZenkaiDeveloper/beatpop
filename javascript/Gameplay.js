@@ -15,34 +15,89 @@ class Gameplay extends Phaser.Scene {
     return line;
   }
 
+loadPaddle(){
+  this.paddle = this.physics.add.image(width/2,rectY,"paddle");
+  this.paddle.body.gravity.y = -100;
+  this.paddle.setBounce(0.2);
+  this.paddle.setCollideWorldBounds(true);
+  this.paddle.setDisplaySize(width/15, 15);
+  // this.paddle.setSize(width/5, 15);
+  this.paddle.body.immovable = true;
+}
+
   createOrb(xVel,yVel){
+    let  letter = (letter)=>{
+      debugger
+          if (letter === "a" && 0 < circle.x && circle.x <= width/4) {
+            if (this.paddle.displayWidth < width/2) {
+              this.paddle.displayWidth += this.interval
+            }
+            score++;
+            circle.destroy();
+            emitter.on = false;
+            this.particles.destroy();
+          }else if (letter === "s" && width/4 < circle.x && circle.x <= width/2 ) {
+            if (this.paddle.displayWidth < width/2) {
+              this.paddle.displayWidth += this.interval
+            }
+            score++;
+            circle.destroy();
+            emitter.on = false;
+            this.particles.destroy();
+          }else if (letter === "d" && width/2 < circle.x && circle.x <= 3*width/4) {
+            if (this.paddle.displayWidth < width/2) {
+              this.paddle.displayWidth += this.interval
+            }
+            score++;
+            circle.destroy();
+            emitter.on = false;
+            this.particles.destroy();
+          }else if(letter === "f" && 3*width/4 < circle.x && circle.x <= width){
+            if (this.paddle.displayWidth < width/2) {
+              this.paddle.displayWidth += this.interval
+            }
+            score++;
+            circle.destroy();
+            emitter.on = false;
+            this.particles.destroy();
+          };
+      }
+
     this.particles = this.add.particles('orb');
-    let emitter = this.particles.createEmitter({
-      speed: 100,
-      scale: { start: .2, end: 0 },
-      blendMode: 'ADD'
-    });
-    circle = this.physics.add.image(width/2,height/4,"mainOrb");
-    circle.setBounce(1);
-    circle.setCollideWorldBounds(true);
-    emitter.startFollow(circle);
-    circle.setVelocity(xVel, yVel);
-    circle.setDisplaySize(150,150);
-    circle.setSize(100,450);
-  }
+      let emitter = this.particles.createEmitter({
+          speed: 100,
+          scale: { start: .2, end: 0 },
+          blendMode: 'ADD'
+      });
+      let circle = this.physics.add.image(width/2,height/4,"mainOrb");
+      circle.setBounce(1);
+      circle.setCollideWorldBounds(true);
+      emitter.startFollow(circle);
+
+      circle.setVelocity(xVel, yVel);
+      circle.setDisplaySize(150,150);
+      circle.setSize(100,450);
+      this.physics.add.collider(circle,this.paddle,()=>{
+        if (this.isHit) {
+          paddleCollide(this.keyup);
+        }
+      });
+      this.physics.add.collider(circle, this.image,()=>{
+        if (this.paddle.displayWidth >= 10) {
+          this.paddle.displayWidth -= this.interval
+        }
+
+        this.particles.destroy();
+        emitter.on = false;
+        circle.destroy();
+      });
 
 
 
-  loadPaddle(){
-    this.paddle = this.physics.add.image(width/2,rectY,"paddle");
+    }
 
-    this.paddle.body.gravity.y = -100;
-    this.paddle.setBounce(0.2);
-    this.paddle.setCollideWorldBounds(true);
-    this.paddle.setDisplaySize(width/20, 15);
-    this.paddle.setSize(width/5, 15);
-    this.paddle.body.immovable = true;
-  }
+
+
 
   hitCircle ()
   {
@@ -59,29 +114,7 @@ class Gameplay extends Phaser.Scene {
     }
   }
 
-  paddleCollide(letter){
-    if (letter === "a" && 0 < circle.x && circle.x <= width/4) {
-      this.paddle.displayWidth += this.interval
-      score++;
-      circle.destroy();
-      this.particles.destroy();
-    }else if (letter === "s" && width/4 < circle.x && circle.x <= width/2 ) {
-      this.paddle.displayWidth += this.interval
-      score++;
-      circle.destroy();
-      this.particles.destroy();
-    }else if (letter === "d" && width/2 < circle.x && circle.x <= 3*width/4) {
-      this.paddle.displayWidth += this.interval
-      score++;
-      circle.destroy();
-      this.particles.destroy();
-    }else if(letter === "f" && 3*width/4 < circle.x && circle.x <= width){
-      this.paddle.displayWidth += this.interval
-      score++;
-      circle.destroy();
-      this.particles.destroy();
-    };
-  }
+
 
   keyboardCollide(){
     this.input.keyboard.on('keyup_A',(event)=>{
@@ -139,14 +172,7 @@ class Gameplay extends Phaser.Scene {
     this.drawLine(width/4, height, width/4, 0);
     this.drawLine(width/2, height, width/2, 0);
     this.drawLine(3*width/4, height, 3*width/4, 0);
-    this.createOrb(300,400);
     this.loadPaddle();
-
-    this.physics.add.collider(circle,this.paddle,()=>{
-      if (this.isHit) {
-        this.paddleCollide(this.keyup);
-      }
-    });
 
     this.image = this.physics.add.image(width/2,height*.85,'horizontal')
     this.image.body.gravity.y = -100;
@@ -154,6 +180,14 @@ class Gameplay extends Phaser.Scene {
     this.image.setDisplaySize(width+20, 1);
     scoreText = this.add.text(width*.85, 25, 'score: 0', { fontSize: '32px', fill: '#00ff00' });
     this.loadPaddle()
+
+
+
+
+
+    setInterval(() => {
+     this.createOrb(this.randomRange(-400, 400), this.randomRange(-400,400))
+   }, this.randomRange(500, 4000))
 
 
     this.add.text(width/8, 6*height/7, 'A', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
@@ -164,7 +198,8 @@ class Gameplay extends Phaser.Scene {
     this.key_right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     this.key_left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
 
-    this.interval = width/50;
+    this.interval = width/45;
+
 
 
     this.keyboardCollide();
@@ -177,18 +212,11 @@ class Gameplay extends Phaser.Scene {
 
     this.moveBar();
 
-    this.physics.add.collider(circle, this.image,()=>{
-      this.paddle.displayWidth -= this.interval
-      circle.destroy();
-      this.particles.destroy();
-    })
-
-
-
+    // if (this.paddle.displayWidth === 0) {
+    //   alert('GAME OVER')
+    //   // game.scene.stop()
+    //   // this.sys.game.destroy(true);
+    //
+    // }
   }
-
-
-
-
-
 }
