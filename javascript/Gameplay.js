@@ -77,7 +77,6 @@ loadPaddle(){
       circle.setVelocity(xVel, yVel);
       circle.setDisplaySize(150,150);
       circle.setSize(100,450);
-<<<<<<< HEAD
       this.physics.add.collider(circle,this.paddle,()=>{
         if (this.isHit) {
           paddleCollide(this.keyup);
@@ -98,9 +97,6 @@ loadPaddle(){
     }
 
 
-=======
-  }
->>>>>>> 8e7e5c64d32d197ac9c6166bfdf4abbb595c5c47
 
 
   moveBar(){
@@ -213,15 +209,5 @@ loadPaddle(){
     //   // this.sys.game.destroy(true);
     //
     // }
-
-
-
-
-
   }
-
-
-
-
-
 }
