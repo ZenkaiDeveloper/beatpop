@@ -22,11 +22,13 @@ class Gameplay extends Phaser.Scene {
           scale: { start: .2, end: 0 },
           blendMode: 'ADD'
       });
-      circle = this.physics.add.image(width/2,height/4,"orb");
+      circle = this.physics.add.image(width/2,height/4,"mainOrb");
       circle.setBounce(1);
       circle.setCollideWorldBounds(true);
       emitter.startFollow(circle);
       circle.setVelocity(xVel, yVel);
+      circle.setDisplaySize(150,150);
+      circle.setSize(100,300);
   }
 
   loadPaddle(){
@@ -34,39 +36,113 @@ class Gameplay extends Phaser.Scene {
     this.paddle.body.gravity.y = -100;
     this.paddle.setBounce(0.2);
     this.paddle.setCollideWorldBounds(true);
-    this.paddle.setDisplaySize(width/20, 15)
+    this.paddle.setDisplaySize(width/20, 15);
+    this.paddle.setSize(width/5, 15);
     this.paddle.body.immovable = true;
   }
 
   moveBar(){
     if (this.key_right.isDown) {
-      this.paddle.body.velocity.x += 50
+      this.paddle.x += 30
 
     }else if (this.key_left.isDown) {
-      this.paddle.body.velocity.x -= 50
+      this.paddle.x -= 30
     }
-
   }
+
+  paddleCollide(letter){
+      if (letter === "a" && 0 < circle.x && circle.x <= width/4) {
+        this.paddle.displayWidth += this.interval
+        score++;
+        circle.destroy();
+        this.particles.destroy();
+      }else if (letter === "s" && width/4 < circle.x && circle.x <= width/2 ) {
+        this.paddle.displayWidth += this.interval
+        score++;
+        circle.destroy();
+        this.particles.destroy();
+      }else if (letter === "d" && width/2 < circle.x && circle.x <= 3*width/4) {
+        this.paddle.displayWidth += this.interval
+        score++;
+        circle.destroy();
+        this.particles.destroy();
+      }else if(letter === "f" && 3*width/4 < circle.x && circle.x <= width){
+        this.paddle.displayWidth += this.interval
+        score++;
+        circle.destroy();
+        this.particles.destroy();
+      };
+  }
+
+  keyboardCollide(){
+    this.input.keyboard.on('keyup_A',(event)=>{
+      this.isHit = true;
+      this.keyup = "a";
+      setTimeout(()=>{
+        this.isHit = false;
+        this.keyup = "";
+      }, 100)
+    })
+
+    this.input.keyboard.on('keyup_S',(event)=>{
+      this.isHit = true
+      this.keyup = "s"
+      setTimeout(()=>{
+        this.isHit = false;
+        this.keyup = ""
+
+      }, 100)
+    })
+    this.input.keyboard.on('keyup_D',(event)=>{
+      this.isHit = true;
+      this.keyup = "d";
+      setTimeout(()=>{
+        this.isHit = false;
+        this.keyup = "";
+      }, 100)
+    })
+    this.input.keyboard.on('keyup_F',(event)=>{
+      this.isHit = true
+      this.keyup = "f"
+      setTimeout(()=>{
+        this.isHit = false;
+        this.keyup = "";
+      }, 100)
+    })
+  }
+
+
 
 /////////////////////LifeCycles//////////////////////////////////////////////////////////////
 
   preload(){
+    this.load.image('mainOrb', "../assets/UIHere.png")
     this.load.image('orb','../assets/white.png');
     this.load.image('horizontal', '../assets/redline.png')
     this.load.image("paddle", "../assets/bigIdea.png")
+    this.load.image('fma2', "../assets/FMA2.jpg")
   }
 
   create(){
-
+    this.keyup ="";
+    this.isHit = false;
+    this.background = this.add.image(width/2, height/2,"fma2");
     this.drawLine(width/4, height, width/4, 0);
     this.drawLine(width/2, height, width/2, 0);
     this.drawLine(3*width/4, height, 3*width/4, 0);
-    this.createOrb(300,400)
+    this.createOrb(300,400);
+    this.loadPaddle();
+
+    this.physics.add.collider(circle,this.paddle,()=>{
+      if (this.isHit) {
+        this.paddleCollide(this.keyup);
+      }
+    });
+
     this.image = this.physics.add.image(width/2,height*.85,'horizontal')
     this.image.body.gravity.y = -100;
     this.image.body.immovable = true;
     this.image.setDisplaySize(width+20, 1);
-    this.loadPaddle()
 
     this.add.text(width/8, 6*height/7, 'A', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
     this.add.text(3*width/8, 6*height/7, 'S', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
@@ -75,65 +151,25 @@ class Gameplay extends Phaser.Scene {
 
     this.key_right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     this.key_left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-    this.key_a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    this.key_s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-    this.key_d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.key_f = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
-    this.delta = this.paddle.displayWidth - this.interval;
+
     this.interval = width/50;
+
+
+    this.keyboardCollide();
+
   }
 
 
 
   update(){
 
-
     this.moveBar();
-    this.physics.add.collider(circle,this.paddle,()=>{
-      this.paddle.displayWidth += this.interval
-      if (0 < circle.x && circle.x <= width/4 && this.key_a.isDown) {
-        score++;
-        circle.destroy();
-        this.particles.destroy();
-      }else if ( width/4 < circle.x && circle.x <= width/2  && this.key_s.isDown) {
-
-        score++;
-        circle.destroy();
-        this.particles.destroy();
-      }else if (width/2 < circle.x && circle.x <= 3*width/4 && this.key_d.isDown) {
-
-        score++;
-        circle.destroy();
-        this.particles.destroy();
-      }else if(3*width/4 < circle.x && circle.x <= width && this.key_f.isDown){
-
-        score++;
-        circle.destroy();
-        this.particles.destroy();
-      }
-      console.log(score);
-    })
 
     this.physics.add.collider(circle, this.image,()=>{
       this.paddle.displayWidth -= this.interval
       circle.destroy();
       this.particles.destroy();
     })
-
-    // if (circle) {
-    //   if (circle.y > height*.85) {
-    //     circle.destroy();
-    //     this.particles.destroy();
-    //     this.paddle.setDisplaySize(500-100,15)
-    //   }
-    // }
-
-    this.physics.add.collider(circle, this.image,console.log)
-
-
-
-
-
 
 
 
