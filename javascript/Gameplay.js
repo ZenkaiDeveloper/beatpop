@@ -28,7 +28,7 @@ class Gameplay extends Phaser.Scene {
       emitter.startFollow(circle);
       circle.setVelocity(xVel, yVel);
       circle.setDisplaySize(150,150);
-      circle.setSize(100,300);
+      circle.setSize(100,450);
   }
 
   loadPaddle(){
