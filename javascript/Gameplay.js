@@ -111,7 +111,7 @@ class Gameplay extends Phaser.Scene {
       this.physics.add.collider(circle,this.paddle,()=>{
 
         if (0 < circle.x && circle.x <= width/4 && this.key_a.isUp) {
-
+          debugger
           this.paddle.displayWidth += this.interval
           this.hitCircle()
           circle.destroy();

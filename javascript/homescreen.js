@@ -44,18 +44,3 @@ update(){
     //
     //
     // this.physics.add.collider(circle, this.image,console.log)
-
-
-
-
-
-
-
-
-  }
-
-
-
-
-
-}
