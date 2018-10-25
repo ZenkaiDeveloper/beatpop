@@ -27,12 +27,11 @@ class Gameplay extends Phaser.Scene {
 
   createOrb(xVel,yVel){
     let paddleCollide = (letter)=>{
-      debugger
       if (letter === "a" && 0 < circle.x && circle.x <= width/4) {
         if (this.paddle.displayWidth < width/2) {
           this.paddle.displayWidth += this.interval
         }
-        score++;
+
         circle.destroy();
         emitter.on = false;
         this.particles.destroy();
@@ -40,7 +39,7 @@ class Gameplay extends Phaser.Scene {
         if (this.paddle.displayWidth < width/2) {
           this.paddle.displayWidth += this.interval
         }
-        score++;
+
         circle.destroy();
         emitter.on = false;
         this.particles.destroy();
@@ -48,7 +47,7 @@ class Gameplay extends Phaser.Scene {
         if (this.paddle.displayWidth < width/2) {
           this.paddle.displayWidth += this.interval
         }
-        score++;
+
         circle.destroy();
         emitter.on = false;
         this.particles.destroy();
@@ -56,7 +55,7 @@ class Gameplay extends Phaser.Scene {
         if (this.paddle.displayWidth < width/2) {
           this.paddle.displayWidth += this.interval
         }
-        score++;
+
         circle.destroy();
         emitter.on = false;
         this.particles.destroy();
@@ -83,15 +82,17 @@ class Gameplay extends Phaser.Scene {
       }
     });
     this.physics.add.collider(circle, this.image,()=>{
+
       if (this.paddle.displayWidth >= 10) {
         this.paddle.displayWidth -= this.interval
-        if (this.paddle.displayWidth <=0  || this.music.isPlaying === false) {
-          // debugger
-        this.music.stop();
-        this.scene.switch("Gameplay2")
-        }
+        if (this.paddle.displayWidth <= 0){
+          this.music.stop()
+          this.scene.switch("Gameplay2")
 
+
+        }
       }
+
 
       this.particles.destroy();
       emitter.on = false;
@@ -228,6 +229,10 @@ class Gameplay extends Phaser.Scene {
     // console.log(this.music.muteNode.context.currentTime);
     this.moveBar();
 
+    if ( this.music.isPlaying === false) {
+      this.music.stop()
+      this.scene.switch("Gameplay2")
+    }
 
     // if (this.paddle.displayWidth === 0) {
     //   alert('GAME OVER')

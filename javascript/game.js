@@ -9,12 +9,9 @@ const rectY = height*.80
 const rectWidth = 150
 const rectHeight =  10
 let platforms;
-
-let score = 0;
-let scoreText;
-const circleArr = []
-let music;
-
+let circle;
+// let score;
+// let scoreText;
 
 let config = {
   type: Phaser.AUTO,
@@ -26,7 +23,8 @@ let config = {
       gravity: gravity
     }
   },
-  scene: [IntroPage, Gameplay, Gameplay2]
+  scene: [ IntroPage, Gameplay, Gameplay2 ]
+
 };
 
 
