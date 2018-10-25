@@ -13,6 +13,7 @@ let platforms;
 let score = 0;
 let scoreText;
 const circleArr = []
+let music;
 
 
 let config = {
@@ -25,8 +26,7 @@ let config = {
       gravity: gravity
     }
   },
-  scene: [ Gameplay ]
-
+  scene: [IntroPage, Gameplay, Gameplay2]
 };
 
 
