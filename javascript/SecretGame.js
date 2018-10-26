@@ -69,6 +69,8 @@ class Secretgame extends Phaser.Scene {
       blendMode: ''
     });
     let circle = this.physics.add.image(width/2,height/4,"mainOrb");
+
+
     circle.setBounce(1);
     circle.setCollideWorldBounds(true);
     emitter.startFollow(circle);
@@ -100,6 +102,115 @@ class Secretgame extends Phaser.Scene {
 
 
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  createOrb2(xVel,yVel){
+    let paddleCollide = (letter)=>{
+      if (letter === "a" && 0 < circle.x && circle.x <= width/4) {
+        if (this.paddle.displayWidth < 2*width/3) {
+          this.paddle.displayWidth += this.interval
+        }
+
+        circle.destroy();
+        emitter.on = false;
+        this.particles.destroy();
+      }else if (letter === "s" && width/4 < circle.x && circle.x <= width/2 ) {
+        if (this.paddle.displayWidth < 2*width/3) {
+          this.paddle.displayWidth += this.interval
+        }
+
+        circle.destroy();
+        emitter.on = false;
+        this.particles.destroy();
+      }else if (letter === "d" && width/2 < circle.x && circle.x <= 3*width/4) {
+        if (this.paddle.displayWidth < 2*width/3) {
+          this.paddle.displayWidth += this.interval
+        }
+
+        circle.destroy();
+        emitter.on = false;
+        this.particles.destroy();
+      }else if(letter === "f" && 3*width/4 < circle.x && circle.x <= width){
+        if (this.paddle.displayWidth < 2*width/3) {
+          this.paddle.displayWidth += this.interval
+        }
+
+        circle.destroy();
+        emitter.on = false;
+        this.particles.destroy();
+      };
+    }
+
+    this.particles = this.add.particles('orb');
+    let emitter = this.particles.createEmitter({
+      speed: 5,
+      scale: { start: .1, end: 0 },
+      blendMode: ''
+    });
+    let circle = this.physics.add.image(width/2,height/4,"me");
+
+
+    circle.setBounce(1);
+    circle.setCollideWorldBounds(true);
+    emitter.startFollow(circle);
+
+    circle.setVelocity(xVel, yVel);
+    circle.setDisplaySize(75,75);
+    circle.setSize(100,200);
+    this.physics.add.overlap(circle,this.paddle,()=>{
+      if (this.isHit) {
+        paddleCollide(this.keyup);
+      }
+    });
+    this.physics.add.collider(circle, this.image,()=>{
+
+      if (this.paddle.displayWidth >= 10) {
+        this.paddle.displayWidth -= this.interval
+        if (this.paddle.displayWidth <= 0){
+          this.music.stop()
+          this.scene.switch("Gameplay2")
+
+
+        }
+      }
+      this.particles.destroy();
+      emitter.on = false;
+      circle.destroy();
+    });
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   moveBar(){
     if (this.key_right.isDown) {
@@ -150,8 +261,9 @@ class Secretgame extends Phaser.Scene {
 
   massCreateOrbs(){
     setInterval(()=>{
-      this.createOrb(this.randomRange(-400, 400), this.randomRange(-400,400))
-    },100)
+      this.createOrb(this.randomRange(-600, 600), this.randomRange(-600,600))
+      this.createOrb2(this.randomRange(-600, 600), this.randomRange(-600,600))
+    },1000)
   }
 
 
@@ -164,6 +276,7 @@ class Secretgame extends Phaser.Scene {
 
   preload(){
     this.load.image('mainOrb', "../assets/group.png")
+    this.load.image('me', "../assets/me.png")
     this.load.image('orb','../assets/orb.png');
     this.load.image('horizontal', '../assets/redline.png')
     this.load.image("paddle", "../assets/bigIdea.png")
