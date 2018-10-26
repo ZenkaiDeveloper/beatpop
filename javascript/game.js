@@ -12,7 +12,7 @@ let circleArr = [];
 
 let score = 0;
 let scoreText;
-
+let usoHighScore = 0;
 
 let config = {
   type: Phaser.AUTO,

@@ -30,6 +30,8 @@ class Gameplay extends Phaser.Scene {
       if (letter === "a" && 0 < circle.x && circle.x <= width/4) {
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
+          score += 300;
+          scoreText.setText(`Score:   ${score}`);
         }
 
         circle.destroy();
@@ -38,6 +40,8 @@ class Gameplay extends Phaser.Scene {
       }else if (letter === "s" && width/4 < circle.x && circle.x <= width/2 ) {
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
+          score += 300;
+          scoreText.setText(`Score:   ${score}`);
         }
 
         circle.destroy();
@@ -46,6 +50,8 @@ class Gameplay extends Phaser.Scene {
       }else if (letter === "d" && width/2 < circle.x && circle.x <= 3*width/4) {
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
+          score += 300;
+          scoreText.setText(`Score:   ${score}`);
         }
 
         circle.destroy();
@@ -54,6 +60,8 @@ class Gameplay extends Phaser.Scene {
       }else if(letter === "f" && 3*width/4 < circle.x && circle.x <= width){
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
+          score += 300;
+          scoreText.setText(`Score:   ${score}`);
         }
 
         circle.destroy();
@@ -83,15 +91,17 @@ class Gameplay extends Phaser.Scene {
     });
     this.physics.add.collider(circle, this.image,()=>{
 
-      if (this.paddle.displayWidth >= 10) {
         this.paddle.displayWidth -= this.interval
+
+        if (score > Number(localStorage.getItem('usoHS'))) {
+            localStorage.setItem('usoHS', score);
+        }
+
         if (this.paddle.displayWidth <= 0){
           this.music.stop()
           this.scene.switch("Gameplay2")
-
-
         }
-      }
+
       this.particles.destroy();
       emitter.on = false;
       circle.destroy();
@@ -160,20 +170,20 @@ class Gameplay extends Phaser.Scene {
     let newArr = reversed.join(circleArr).split(",").filter(e=> Number(e)).map(e=>Number(e));
     this.playTime
     for (let num in newArr) {
-        ((index,arr)=>{
-          setTimeout(()=>{
-            if (arr[Number(index+1)]%2===0) {
-              let xEvenNum = arr[Number(index)]*(-3)-(100);
-              let yEvenNum = arr[Number(index)+100]*(3)+(100);
-              this.createOrb(xEvenNum,yEvenNum)
-              }else{
-              let xOddNum = arr[Number(index)]*(3)+(100);
-              let yOddNum = arr[Number(index)+100]*(-3)-(100);
-              this.createOrb(xOddNum,yOddNum)
-            }
-          }, num*(1.5*(arr[index])+1000-(this.playTime*2)));
+      ((index,arr)=>{
+        setTimeout(()=>{
+          if (arr[Number(index+1)]%2===0) {
+            let xEvenNum = arr[Number(index)]*(-3)-(100);
+            let yEvenNum = arr[Number(index)+100]*(3)+(100);
+            this.createOrb(xEvenNum,yEvenNum)
+          }else{
+            let xOddNum = arr[Number(index)]*(3)+(100);
+            let yOddNum = arr[Number(index)+100]*(-3)-(100);
+            this.createOrb(xOddNum,yOddNum)
+          }
+        }, num*(1.5*(arr[index])+1000-(this.playTime*2)));
 
-        })(num,newArr);
+      })(num,newArr);
     }
   }
 
@@ -189,12 +199,12 @@ class Gameplay extends Phaser.Scene {
     this.load.audio('uso', '../assets/uso.mp3')
     this.uso = new Music("../assets/Uso.mp3")
     this.uso.loadSong(this.uso.filePath);
+
   }
 
   create(){
 
-
-
+  let usoStorage = localStorage.getItem('usoHS')
 
 
 
@@ -248,7 +258,9 @@ class Gameplay extends Phaser.Scene {
 
 
     this.keyboardCollide();
-
+    scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#FFFFFF' });
+    usoHighScore = this.add.text(width*.8,16 , 'High Score: 0', { fontSize: '32px', fill: '#FFFFFF' });
+    usoHighScore.setText(`High Score:   ${usoStorage}`);
 
 
 
@@ -266,6 +278,10 @@ class Gameplay extends Phaser.Scene {
     if ( this.music.isPlaying === false) {
       this.music.stop()
       this.scene.switch("Gameplay2")
+
+        localStorage.setItem('usoHS', score);
+
+
     }
 
     // if (this.paddle.displayWidth === 0) {
