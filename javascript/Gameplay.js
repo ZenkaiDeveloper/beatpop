@@ -20,14 +20,13 @@ loadPaddle(){
   this.paddle.body.gravity.y = -100;
   this.paddle.setBounce(0.2);
   this.paddle.setCollideWorldBounds(true);
-  this.paddle.setDisplaySize(width/15, 15);
-  // this.paddle.setSize(width/5, 15);
+  this.paddle.setDisplaySize(width/10, 15);
+  this.paddle.setSize(width/5, 15);
   this.paddle.body.immovable = true;
 }
 
   createOrb(xVel,yVel){
     let paddleCollide = (letter)=>{
-      debugger
           if (letter === "a" && 0 < circle.x && circle.x <= width/4) {
             if (this.paddle.displayWidth < width/2) {
               this.paddle.displayWidth += this.interval
@@ -92,12 +91,7 @@ loadPaddle(){
         circle.destroy();
       });
 
-
-
     }
-
-
-
 
   moveBar(){
     if (this.key_right.isDown) {
@@ -107,7 +101,6 @@ loadPaddle(){
       this.paddle.x -= 30
     }
   }
-
 
 
   keyboardCollide(){
@@ -160,6 +153,20 @@ loadPaddle(){
   }
 
   create(){
+
+
+    let uso = new Music("../assets/Uso.mp3")
+
+    uso.playSong(uso.filePath);
+    
+
+    setTimeout(()=>{
+      arr.push(uso.show())
+        debugger
+    },2000)
+
+
+
     this.keyup ="";
     this.isHit = false;
     this.background = this.add.image(width/2, height/2,"fma2");
@@ -173,13 +180,9 @@ loadPaddle(){
     this.image.body.immovable = true;
     this.image.setDisplaySize(width+20, 1);
 
-
-
-
     setInterval(() => {
      this.createOrb(this.randomRange(-400, 400), this.randomRange(-400,400))
    }, this.randomRange(500, 4000))
-
 
     this.add.text(width/8, 6*height/7, 'A', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
     this.add.text(3*width/8, 6*height/7, 'S', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
@@ -189,11 +192,13 @@ loadPaddle(){
     this.key_right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     this.key_left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
 
-    this.interval = width/45;
+    this.interval = width/40;
 
 
 
     this.keyboardCollide();
+
+
 
   }
 
