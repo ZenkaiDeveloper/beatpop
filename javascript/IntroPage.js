@@ -53,7 +53,8 @@ class IntroPage extends Phaser.Scene {
     this.music = this.game.sound.add('intro')
     this.music.play()
     this.usoMessage = this.add.text((4*width/8)-(150), height/7, "BeatPop", { fontSize: '70px', fill: '#a30843', backgroundColor:'#eee' });
-    this.usoSong = this.add.text(width/3, height/3, "Uso - Full Metal Alchemist", { fontSize: '42px', fill: '#eee', backgroundColor: "#710c96" });
+
+    this.usoSong = this.add.text(width/3, height/3, `Uso - Full Metal Alchemist`, { fontSize: '42px', fill: '#eee', backgroundColor: "#710c96" });
 
 
 
