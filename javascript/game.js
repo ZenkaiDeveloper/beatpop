@@ -11,7 +11,10 @@ const rectHeight =  10
 let circleArr = [];
 
 let score = 0;
-let scoreText;
+let scoreText="";
+let usoHS = 0;
+let usoHSText = "";
+let newRecord = false;
 
 
 let config = {

@@ -8,6 +8,17 @@ class Gameplay extends Phaser.Scene {
     return Phaser.Math.RND.integerInRange(num1, num2);
   }
 
+  checkHScore(){
+    if (score>usoHS){
+    newRecord = true;
+    usoHS = score;
+    usoHSText.setText = "High Score: " + usoHS;
+    localStorage.setItem('usohscore', usoHS);
+  }else{
+    newRecord = false;
+  }
+  }
+
   drawLine (startX,startY,endX,endY) {
     let line = new Phaser.Geom.Line(startX, startY, endX, endY);
     let graphics = this.add.graphics({ lineStyle: { width: 2, color: 0xaa00aa } });
@@ -28,6 +39,9 @@ class Gameplay extends Phaser.Scene {
   createOrb(xVel,yVel){
     let paddleCollide = (letter)=>{
       if (letter === "a" && 0 < circle.x && circle.x <= width/4) {
+        score += 300;
+        scoreText.setText(`Score:  ${score}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -36,6 +50,9 @@ class Gameplay extends Phaser.Scene {
         emitter.on = false;
         this.particles.destroy();
       }else if (letter === "s" && width/4 < circle.x && circle.x <= width/2 ) {
+        score += 300;
+        scoreText.setText(`Score:  ${score}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -44,6 +61,9 @@ class Gameplay extends Phaser.Scene {
         emitter.on = false;
         this.particles.destroy();
       }else if (letter === "d" && width/2 < circle.x && circle.x <= 3*width/4) {
+        score += 300;
+        scoreText.setText(`Score:  ${score}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -52,6 +72,9 @@ class Gameplay extends Phaser.Scene {
         emitter.on = false;
         this.particles.destroy();
       }else if(letter === "f" && 3*width/4 < circle.x && circle.x <= width){
+        score += 300;
+        scoreText.setText(`Score:  ${score}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -199,10 +222,6 @@ class Gameplay extends Phaser.Scene {
 
 
 
-
-
-
-
     this.keyup ="";
     this.isHit = false;
     this.background = this.add.image(width/2, height/2,"fma2");
@@ -252,10 +271,22 @@ class Gameplay extends Phaser.Scene {
 
 
 
+
+
+
+
+
+    scoreText = this.add.text(16, 16,"Score:" + score, { fontSize: '32px', fill: '#FFFFFF' });
+
+
+
+    if(localStorage.getItem('usohscore')){
+     usoHS = localStorage.getItem('usohscore');
+   }
+   usoHSText = this.add.text(width*.75,15,"High Score: " + usoHS, { fontSize: '32px', fill: '#FFFFFF' });
+
+
   }
-
-
-
 
   update(){
 
