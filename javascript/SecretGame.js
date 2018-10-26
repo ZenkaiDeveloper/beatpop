@@ -3,10 +3,27 @@ class Secretgame extends Phaser.Scene {
     super({key:"Secretgame"})
   }
 
+  // let tacoScore = 0;
+  // let tacoScoreText="";
+  // let tacoHS = 0;
+  // let tacoHSText = "";
+
   /////////////////Custom Functions//////////////////////
   randomRange(num1,num2){
     return Phaser.Math.RND.integerInRange(num1, num2);
   }
+
+  checkHScore(){
+    if (tacoScore>tacoHS){
+    newRecord = true;
+    tacoHS = tacoScore;
+    tacoHSText.setText = "High Score: " + tacoHS;
+    localStorage.setItem('tacohscore', tacoHS);
+  }else{
+    newRecord = false;
+  }
+  }
+
 
   drawLine (startX,startY,endX,endY) {
     let line = new Phaser.Geom.Line(startX, startY, endX, endY);
@@ -28,6 +45,9 @@ class Secretgame extends Phaser.Scene {
   createOrb(xVel,yVel){
     let paddleCollide = (letter)=>{
       if (letter === "a" && 0 < circle.x && circle.x <= width/4) {
+        tacoScore += 300;
+        tacoScoreText.setText(`Score:  ${tacoScore}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -36,6 +56,9 @@ class Secretgame extends Phaser.Scene {
         emitter.on = false;
         this.particles.destroy();
       }else if (letter === "s" && width/4 < circle.x && circle.x <= width/2 ) {
+        tacoScore += 300;
+        tacoScoreText.setText(`Score:  ${tacoScore}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -44,6 +67,9 @@ class Secretgame extends Phaser.Scene {
         emitter.on = false;
         this.particles.destroy();
       }else if (letter === "d" && width/2 < circle.x && circle.x <= 3*width/4) {
+        tacoScore += 300;
+        tacoScoreText.setText(`Score:  ${tacoScore}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -52,6 +78,9 @@ class Secretgame extends Phaser.Scene {
         emitter.on = false;
         this.particles.destroy();
       }else if(letter === "f" && 3*width/4 < circle.x && circle.x <= width){
+        tacoScore += 300;
+        tacoScoreText.setText(`Score:  ${tacoScore}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -342,6 +371,20 @@ class Secretgame extends Phaser.Scene {
 
 
     this.keyboardCollide();
+
+
+
+
+
+    tacoScoreText = this.add.text(16, 16,"Score:" + tacoScore, { fontSize: '32px', fill: '#FFFFFF' });
+
+
+
+    if(localStorage.getItem('tacohscore')){
+     tacoHS = localStorage.getItem('tacohscore');
+    }
+    tacoHSText = this.add.text(width*.75,15,"High Score: " + tacoHS, { fontSize: '32px', fill: '#FFFFFF' });
+
 
 
 

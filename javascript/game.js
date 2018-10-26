@@ -29,6 +29,12 @@ let spaceHS = 0;
 let spaceHSText = "";
 
 
+let tacoScore = 0;
+let tacoScoreText="";
+let tacoHS = 0;
+let tacoHSText = "";
+
+
 let config = {
   type: Phaser.AUTO,
   width: width,
