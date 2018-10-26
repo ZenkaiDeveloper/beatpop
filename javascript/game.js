@@ -17,6 +17,18 @@ let usoHSText = "";
 let newRecord = false;
 
 
+let burnScore = 0;
+let burnScoreText="";
+let burnHS = 0;
+let burnHSText = "";
+
+
+let spaceScore = 0;
+let spaceScoreText="";
+let spaceHS = 0;
+let spaceHSText = "";
+
+
 let config = {
   type: Phaser.AUTO,
   width: width,

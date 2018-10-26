@@ -5,7 +5,7 @@ class IntroPage extends Phaser.Scene {
 
   preload(){
     this.load.audio('intro', '../assets/Taliyah.mp3')
-    this.load.image('blue', "../assets/blue.png")
+    this.load.image('loading', "../assets/load.jpg")
   }
 
 
@@ -49,17 +49,18 @@ class IntroPage extends Phaser.Scene {
 
 
 
-    this.background = this.add.image(width/2, height/2,"blue");
+    this.background = this.add.image(width/2, height/2,"loading");
+    this.background.setDisplaySize(width,height)
     this.music = this.game.sound.add('intro')
     this.music.play()
-    this.usoMessage = this.add.text((4*width/8)-(150), height/7, "BeatPop", { fontSize: '70px', fill: '#a30843', backgroundColor:'#eee' });
-    this.usoSong = this.add.text(width/3, height/3, "Uso - Full Metal Alchemist", { fontSize: '42px', fill: '#eee', backgroundColor: "#710c96" });
+    this.usoMessage = this.add.text((4*width/8)-(150), height/7, "BeatPop", { fontSize: '70px', fill: '#a30843', backgroundColor:'#000' });
+    this.usoSong = this.add.text(width/3, height/3, "Uso - Full Metal Alchemist", { fontSize: '42px', fill: '#eee', backgroundColor: "#000" });
 
 
 
-    this.burnSong = this.add.text(width/3, (height/2)-(80), "Burn It Down - Linkin Park", { fontSize: '42px', fill: '#eee', backgroundColor: "#710c96" });
+    this.burnSong = this.add.text(width/3, (height/2)-(80), "Burn It Down - Linkin Park", { fontSize: '42px', fill: '#eee', backgroundColor: "#000" });
 
-    this.spaceJam = this.add.text(width/3, (height/3)-(80), "Are you ready for this - Space Jam ", { fontSize: '42px', fill: '#eee', backgroundColor: "#710c96" });
+    this.spaceJam = this.add.text(width/3, (height/3)-(80), "Are you ready for this - Space Jam ", { fontSize: '42px', fill: '#eee', backgroundColor: "#000" });
 
     this.usoSong.setInteractive();
     this.burnSong.setInteractive();

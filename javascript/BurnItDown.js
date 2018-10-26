@@ -8,6 +8,17 @@ class BurnItDown extends Phaser.Scene {
     return Phaser.Math.RND.integerInRange(num1, num2);
   }
 
+  checkHScore(){
+    if (burnScore>burnHS){
+    newRecord = true;
+    burnHS = burnScore;
+    burnHSText.setText = "High Score: " + burnHS;
+    localStorage.setItem('burnhscore', burnHS);
+  }else{
+    newRecord = false;
+  }
+  }
+
   drawLine (startX,startY,endX,endY) {
     let line = new Phaser.Geom.Line(startX, startY, endX, endY);
     let graphics = this.add.graphics({ lineStyle: { width: 2, color: 0xaa00aa } });
@@ -28,6 +39,9 @@ class BurnItDown extends Phaser.Scene {
   createOrb(xVel,yVel){
     let paddleCollide = (letter)=>{
       if (letter === "a" && 0 < circle.x && circle.x <= width/4) {
+        burnScore += 300;
+        burnScoreText.setText(`Score:  ${burnScore}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -36,6 +50,9 @@ class BurnItDown extends Phaser.Scene {
         emitter.on = false;
         this.particles.destroy();
       }else if (letter === "s" && width/4 < circle.x && circle.x <= width/2 ) {
+        burnScore += 300;
+        burnScoreText.setText(`Score:  ${burnScore}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -44,6 +61,9 @@ class BurnItDown extends Phaser.Scene {
         emitter.on = false;
         this.particles.destroy();
       }else if (letter === "d" && width/2 < circle.x && circle.x <= 3*width/4) {
+        burnScore += 300;
+        burnScoreText.setText(`Score:  ${burnScore}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -52,6 +72,9 @@ class BurnItDown extends Phaser.Scene {
         emitter.on = false;
         this.particles.destroy();
       }else if(letter === "f" && 3*width/4 < circle.x && circle.x <= width){
+        burnScore += 300;
+        burnScoreText.setText(`Score:  ${burnScore}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -83,7 +106,7 @@ class BurnItDown extends Phaser.Scene {
     });
     this.physics.add.collider(circle, this.image,()=>{
 
-      if (this.paddle.displayWidth >= 10) {
+
         this.paddle.displayWidth -= this.interval
         if (this.paddle.displayWidth <= 0){
           this.music.stop()
@@ -91,7 +114,7 @@ class BurnItDown extends Phaser.Scene {
 
 
         }
-      }
+
       this.particles.destroy();
       emitter.on = false;
       circle.destroy();
@@ -239,6 +262,18 @@ class BurnItDown extends Phaser.Scene {
 
     this.keyboardCollide();
 
+
+
+
+
+    burnScoreText = this.add.text(16, 16,"Score:" + burnScore, { fontSize: '32px', fill: '#FFFFFF' });
+
+
+
+    if(localStorage.getItem('burnhscore')){
+     burnHS = localStorage.getItem('burnhscore');
+    }
+    burnHSText = this.add.text(width*.75,15,"High Score: " + burnHS, { fontSize: '32px', fill: '#FFFFFF' });
 
 
 

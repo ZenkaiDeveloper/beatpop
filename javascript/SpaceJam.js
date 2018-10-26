@@ -3,9 +3,25 @@ class SpaceJam extends Phaser.Scene {
     super({key:"SpaceJam"})
   }
 
+  // let spaceScore = 0;
+  // let spaceScoreText="";
+  // let spaceHS = 0;
+  // let spaceHSText = "";
+
   /////////////////Custom Functions//////////////////////
   randomRange(num1,num2){
     return Phaser.Math.RND.integerInRange(num1, num2);
+  }
+
+  checkHScore(){
+    if (spaceScore>spaceHS){
+    newRecord = true;
+    spaceHS = spaceScore;
+    spaceHSText.setText = "High Score: " + spaceHS;
+    localStorage.setItem('spacehscore', spaceHS);
+  }else{
+    newRecord = false;
+  }
   }
 
   drawLine (startX,startY,endX,endY) {
@@ -28,6 +44,9 @@ class SpaceJam extends Phaser.Scene {
   createOrb(xVel,yVel){
     let paddleCollide = (letter)=>{
       if (letter === "a" && 0 < circle.x && circle.x <= width/4) {
+        spaceScore += 300;
+        spaceScoreText.setText(`Score:  ${spaceScore}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -36,6 +55,9 @@ class SpaceJam extends Phaser.Scene {
         emitter.on = false;
         this.particles.destroy();
       }else if (letter === "s" && width/4 < circle.x && circle.x <= width/2 ) {
+        spaceScore += 300;
+        spaceScoreText.setText(`Score:  ${spaceScore}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -44,6 +66,9 @@ class SpaceJam extends Phaser.Scene {
         emitter.on = false;
         this.particles.destroy();
       }else if (letter === "d" && width/2 < circle.x && circle.x <= 3*width/4) {
+        spaceScore += 300;
+        spaceScoreText.setText(`Score:  ${spaceScore}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -52,6 +77,9 @@ class SpaceJam extends Phaser.Scene {
         emitter.on = false;
         this.particles.destroy();
       }else if(letter === "f" && 3*width/4 < circle.x && circle.x <= width){
+        spaceScore += 300;
+        spaceScoreText.setText(`Score:  ${spaceScore}`);
+        this.checkHScore();
         if (this.paddle.displayWidth < 2*width/3) {
           this.paddle.displayWidth += this.interval
         }
@@ -239,6 +267,17 @@ class SpaceJam extends Phaser.Scene {
 
 
     this.keyboardCollide();
+
+
+    spaceScoreText = this.add.text(16, 16,"Score:" + spaceScore, { fontSize: '32px', fill: '#FFFFFF' });
+
+
+
+    if(localStorage.getItem('spacehscore')){
+     spaceHS = localStorage.getItem('spacehscore');
+    }
+    spaceHSText = this.add.text(width*.75,15,"High Score: " + spaceHS, { fontSize: '32px', fill: '#FFFFFF' });
+
 
 
 
