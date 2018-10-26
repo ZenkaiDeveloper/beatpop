@@ -163,7 +163,7 @@ class Secretgame extends Phaser.Scene {
   /////////////////////LifeCycles//////////////////////////////////////////////////////////////
 
   preload(){
-    this.load.image('mainOrb', "../assets/mountain-tile.png")
+    this.load.image('mainOrb', "../assets/group.png")
     this.load.image('orb','../assets/orb.png');
     this.load.image('horizontal', '../assets/redline.png')
     this.load.image("paddle", "../assets/bigIdea.png")
