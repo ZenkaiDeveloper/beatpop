@@ -8,11 +8,10 @@ const rectX = 300
 const rectY = height*.80
 const rectWidth = 150
 const rectHeight =  10
-let arr = [];
+let circleArr = [];
 
 let score = 0;
 let scoreText;
-const circleArr = []
 
 
 let config = {
@@ -25,7 +24,7 @@ let config = {
       gravity: gravity
     }
   },
-  scene: [ Gameplay ]
+  scene: [ IntroPage, Gameplay, Gameplay2 ]
 
 };
 

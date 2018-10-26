@@ -9,96 +9,104 @@ class Gameplay extends Phaser.Scene {
   }
 
   drawLine (startX,startY,endX,endY) {
-  let line = new Phaser.Geom.Line(startX, startY, endX, endY);
-  let graphics = this.add.graphics({ lineStyle: { width: 2, color: 0xaa00aa } });
-  graphics.strokeLineShape(line);
-  return line;
-}
+    let line = new Phaser.Geom.Line(startX, startY, endX, endY);
+    let graphics = this.add.graphics({ lineStyle: { width: 2, color: 0xaa00aa } });
+    graphics.strokeLineShape(line);
+    return line;
+  }
 
-loadPaddle(){
-  this.paddle = this.physics.add.image(width/2,rectY,"paddle");
-  this.paddle.body.gravity.y = -100;
-  this.paddle.setBounce(0.2);
-  this.paddle.setCollideWorldBounds(true);
-  this.paddle.setDisplaySize(width/10, 15);
-  this.paddle.setSize(width/5, 15);
-  this.paddle.body.immovable = true;
-}
+  loadPaddle(){
+    this.paddle = this.physics.add.image(width/2,rectY,"paddle");
+    this.paddle.body.gravity.y = -100;
+    this.paddle.setBounce(0.2);
+    this.paddle.setCollideWorldBounds(true);
+    this.paddle.setDisplaySize(width/5, 15);
+    // this.paddle.setSize(width/15, 15);
+    this.paddle.body.immovable = true;
+  }
 
   createOrb(xVel,yVel){
     let paddleCollide = (letter)=>{
-          if (letter === "a" && 0 < circle.x && circle.x <= width/4) {
-            if (this.paddle.displayWidth < width/2) {
-              this.paddle.displayWidth += this.interval
-            }
-            score++;
-            circle.destroy();
-            emitter.on = false;
-            this.particles.destroy();
-          }else if (letter === "s" && width/4 < circle.x && circle.x <= width/2 ) {
-            if (this.paddle.displayWidth < width/2) {
-              this.paddle.displayWidth += this.interval
-            }
-            score++;
-            circle.destroy();
-            emitter.on = false;
-            this.particles.destroy();
-          }else if (letter === "d" && width/2 < circle.x && circle.x <= 3*width/4) {
-            if (this.paddle.displayWidth < width/2) {
-              this.paddle.displayWidth += this.interval
-            }
-            score++;
-            circle.destroy();
-            emitter.on = false;
-            this.particles.destroy();
-          }else if(letter === "f" && 3*width/4 < circle.x && circle.x <= width){
-            if (this.paddle.displayWidth < width/2) {
-              this.paddle.displayWidth += this.interval
-            }
-            score++;
-            circle.destroy();
-            emitter.on = false;
-            this.particles.destroy();
-          };
-      }
+      if (letter === "a" && 0 < circle.x && circle.x <= width/4) {
+        if (this.paddle.displayWidth < 2*width/3) {
+          this.paddle.displayWidth += this.interval
+        }
+
+        circle.destroy();
+        emitter.on = false;
+        this.particles.destroy();
+      }else if (letter === "s" && width/4 < circle.x && circle.x <= width/2 ) {
+        if (this.paddle.displayWidth < 2*width/3) {
+          this.paddle.displayWidth += this.interval
+        }
+
+        circle.destroy();
+        emitter.on = false;
+        this.particles.destroy();
+      }else if (letter === "d" && width/2 < circle.x && circle.x <= 3*width/4) {
+        if (this.paddle.displayWidth < 2*width/3) {
+          this.paddle.displayWidth += this.interval
+        }
+
+        circle.destroy();
+        emitter.on = false;
+        this.particles.destroy();
+      }else if(letter === "f" && 3*width/4 < circle.x && circle.x <= width){
+        if (this.paddle.displayWidth < 2*width/3) {
+          this.paddle.displayWidth += this.interval
+        }
+
+        circle.destroy();
+        emitter.on = false;
+        this.particles.destroy();
+      };
+    }
 
     this.particles = this.add.particles('orb');
-      let emitter = this.particles.createEmitter({
-          speed: 100,
-          scale: { start: .2, end: 0 },
-          blendMode: 'ADD'
-      });
-      let circle = this.physics.add.image(width/2,height/4,"mainOrb");
-      circle.setBounce(1);
-      circle.setCollideWorldBounds(true);
-      emitter.startFollow(circle);
+    let emitter = this.particles.createEmitter({
+      speed: 100,
+      scale: { start: .2, end: 0 },
+      blendMode: 'ADD'
+    });
+    let circle = this.physics.add.image(width/2,height/4,"mainOrb");
+    circle.setBounce(1);
+    circle.setCollideWorldBounds(true);
+    emitter.startFollow(circle);
 
-      circle.setVelocity(xVel, yVel);
-      circle.setDisplaySize(150,150);
-      circle.setSize(100,450);
-      this.physics.add.collider(circle,this.paddle,()=>{
-        if (this.isHit) {
-          paddleCollide(this.keyup);
+    circle.setVelocity(xVel, yVel);
+    circle.setDisplaySize(200,150);
+    circle.setSize(100,200);
+    this.physics.add.overlap(circle,this.paddle,()=>{
+      if (this.isHit) {
+        paddleCollide(this.keyup);
+      }
+    });
+    this.physics.add.collider(circle, this.image,()=>{
+
+      if (this.paddle.displayWidth >= 10) {
+        this.paddle.displayWidth -= this.interval
+        if (this.paddle.displayWidth <= 0){
+          this.music.stop()
+          this.scene.switch("Gameplay2")
+
+
         }
-      });
-      this.physics.add.collider(circle, this.image,()=>{
-        if (this.paddle.displayWidth >= 10) {
-          this.paddle.displayWidth -= this.interval
-        }
+      }
+      this.particles.destroy();
+      emitter.on = false;
+      circle.destroy();
+    });
 
-        this.particles.destroy();
-        emitter.on = false;
-        circle.destroy();
-      });
 
-    }
+
+  }
 
   moveBar(){
     if (this.key_right.isDown) {
-      this.paddle.x += 30
+      this.paddle.x += 25
 
     }else if (this.key_left.isDown) {
-      this.paddle.x -= 30
+      this.paddle.x -= 25
     }
   }
 
@@ -110,7 +118,7 @@ loadPaddle(){
       setTimeout(()=>{
         this.isHit = false;
         this.keyup = "";
-      }, 100)
+      }, 400)
     })
 
     this.input.keyboard.on('keyup_S',(event)=>{
@@ -120,7 +128,7 @@ loadPaddle(){
         this.isHit = false;
         this.keyup = ""
 
-      }, 100)
+      }, 400)
     })
     this.input.keyboard.on('keyup_D',(event)=>{
       this.isHit = true;
@@ -128,7 +136,7 @@ loadPaddle(){
       setTimeout(()=>{
         this.isHit = false;
         this.keyup = "";
-      }, 100)
+      }, 400)
     })
     this.input.keyboard.on('keyup_F',(event)=>{
       this.isHit = true
@@ -136,13 +144,41 @@ loadPaddle(){
       setTimeout(()=>{
         this.isHit = false;
         this.keyup = "";
-      }, 100)
+      }, 400)
     })
   }
 
+  // massCreateOrbs(num,newArr){
+  //
+  // }
 
 
-/////////////////////LifeCycles//////////////////////////////////////////////////////////////
+
+
+  manipulateCircleArr(){
+    let reversed = circleArr.slice().reverse();
+    let newArr = reversed.join(circleArr).split(",").filter(e=> Number(e)).map(e=>Number(e));
+    this.playTime
+    for (let num in newArr) {
+        ((index,arr)=>{
+          setTimeout(()=>{
+            if (arr[Number(index+1)]%2===0) {
+              let xEvenNum = arr[Number(index)]*(-3)-(100);
+              let yEvenNum = arr[Number(index)+100]*(3)+(100);
+              this.createOrb(xEvenNum,yEvenNum)
+              }else{
+              let xOddNum = arr[Number(index)]*(3)+(100);
+              let yOddNum = arr[Number(index)+100]*(-3)-(100);
+              this.createOrb(xOddNum,yOddNum)
+            }
+          }, num*(1.5*(arr[index])+1000-(this.playTime*2)));
+
+        })(num,newArr);
+    }
+  }
+
+
+  /////////////////////LifeCycles//////////////////////////////////////////////////////////////
 
   preload(){
     this.load.image('mainOrb', "../assets/UIHere.png")
@@ -150,20 +186,20 @@ loadPaddle(){
     this.load.image('horizontal', '../assets/redline.png')
     this.load.image("paddle", "../assets/bigIdea.png")
     this.load.image('fma2', "../assets/FMA2.jpg")
+    this.load.audio('uso', '../assets/uso.mp3')
+    this.uso = new Music("../assets/Uso.mp3")
+    this.uso.loadSong(this.uso.filePath);
   }
 
   create(){
 
 
-    let uso = new Music("../assets/Uso.mp3")
 
-    uso.playSong(uso.filePath);
-    
 
-    setTimeout(()=>{
-      arr.push(uso.show())
-        debugger
-    },2000)
+
+
+
+
 
 
 
@@ -180,9 +216,24 @@ loadPaddle(){
     this.image.body.immovable = true;
     this.image.setDisplaySize(width+20, 1);
 
-    setInterval(() => {
-     this.createOrb(this.randomRange(-400, 400), this.randomRange(-400,400))
-   }, this.randomRange(500, 4000))
+    this.music = this.game.sound.add('uso')
+
+
+    this.music.play()
+
+
+    setTimeout(()=>{
+      circleArr = this.uso.show()
+      this.manipulateCircleArr()
+    },2000)
+
+
+
+    // this.input.keyboard.on('keyup_Q',(event)=>{
+    //   this.createOrb(this.randomRange(-400, 400), this.randomRange(-400,400))
+    // });
+
+
 
     this.add.text(width/8, 6*height/7, 'A', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
     this.add.text(3*width/8, 6*height/7, 'S', { fontFamily: 'Arial', fontSize: 64, color: '#00ff00' });
@@ -200,13 +251,22 @@ loadPaddle(){
 
 
 
+
   }
+
 
 
 
   update(){
 
+    this.playTime = this.music.muteNode.context.currentTime;
     this.moveBar();
+
+
+    if ( this.music.isPlaying === false) {
+      this.music.stop()
+      this.scene.switch("Gameplay2")
+    }
 
     // if (this.paddle.displayWidth === 0) {
     //   alert('GAME OVER')
