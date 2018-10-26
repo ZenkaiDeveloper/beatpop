@@ -27,9 +27,9 @@ class IntroPage extends Phaser.Scene {
 
 
 
-  document.body.addEventListener("keydown",(event)=>{
+    document.body.addEventListener("keydown",(event)=>{
 
-    this.keyName = event.key;
+      this.keyName = event.key;
 
       if( this.codes[this.index]=== this.keyName){
         this.index++;
@@ -41,9 +41,9 @@ class IntroPage extends Phaser.Scene {
         }
 
       }else{
-      this.index = 0;
-    }
-  });
+        this.index = 0;
+      }
+    });
 
 
 
@@ -59,9 +59,11 @@ class IntroPage extends Phaser.Scene {
 
     this.burnSong = this.add.text(width/3, (height/2)-(80), "Burn It Down - Linkin Park", { fontSize: '42px', fill: '#eee', backgroundColor: "#710c96" });
 
+    this.spaceJam = this.add.text(width/3, (height/3)-(80), "Are you ready for this - Space Jam ", { fontSize: '42px', fill: '#eee', backgroundColor: "#710c96" });
 
     this.usoSong.setInteractive();
     this.burnSong.setInteractive();
+    this.spaceJam.setInteractive();
 
     this.usoSong.on('pointerdown', ()=> {
       this.music.stop();
@@ -73,6 +75,10 @@ class IntroPage extends Phaser.Scene {
       this.scene.switch("BurnItDown")
     })
 
+    this.spaceJam.on('pointerdown', ()=> {
+      this.music.stop();
+      this.scene.switch("SpaceJam")
+    })
 
 
 
