@@ -12,6 +12,8 @@ let arr = [];
 
 let score = 0;
 let scoreText;
+const circleArr = []
+
 
 let config = {
   type: Phaser.AUTO,
