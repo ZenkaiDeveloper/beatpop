@@ -45,7 +45,7 @@ let config = {
       gravity: gravity
     }
   },
-  scene: [ IntroPage, Gameplay, Gameplay2, BurnItDown, Secretgame, SpaceJam ]
+  scene: [ IntroPage, Gameplay, Gameplay2, BurnItDown, SpaceJam ]
 
 };
 
